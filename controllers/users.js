@@ -30,6 +30,7 @@ const createUser = async (req, res, next) => {
     if (err.code === 11000) {
       return next(new ErrorConflict('При регистрации указан email, который уже существует на сервере'));
     }
+    console.log(err);
     return next(new ErrorServer('Ошибка по умолчанию регистрация'));
   }
 };
@@ -51,6 +52,7 @@ const updateProfile = async (req, res, next) => {
     if (err.name === 'ValidationError') {
       return next(new ErrorCode('Переданные данные не валидны'));
     }
+    console.log(err);
     return next(new ErrorServer('Ошибка по умолчанию'));
   }
 };
@@ -61,11 +63,11 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
-      throw new ErrorUnauthorized('Неправильный email или пароль');
+      return next(new ErrorUnauthorized('Неправильный email или пароль'));
     }
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) {
-      throw new ErrorUnauthorized('Неправильный email или пароль');
+      return next(new ErrorUnauthorized('Неправильный email или пароль'));
     }
     const token = jwt.sign(
       { _id: user._id },
@@ -92,7 +94,7 @@ const getMyInfo = async (req, res, next) => {
     return res.send(user);
   } catch (err) {
     console.log(err);
-    return next(new ErrorServer('Ошибка по умолчанию'));
+    return next(new ErrorServer('Ошибка по умолчанию'), err);
   }
 };
 

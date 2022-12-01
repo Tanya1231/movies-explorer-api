@@ -24,7 +24,7 @@ router.post('/signup', celebrate({
 router.use('/users', auth, routerUsers);
 router.use('/movies', auth, routerMovies);
 
-router.use('*', (err, req, res, next) => {
+router.use('*', (req, res, next) => {
   next(new ErrorNotFound('Страница не найдена'));
 });
 
