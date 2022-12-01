@@ -78,7 +78,7 @@ const login = async (req, res, next) => {
       httpOnly: true,
       sameSite: true,
     });
-    return res.status(200).send({ message: 'Авторизация прошла успешно', token, user });
+    return res.status(200).send({ message: 'Авторизация прошла успешно', token });
   } catch (err) {
     return next(new ErrorServer('Ошибка по умолчанию'));
   }
