@@ -12,12 +12,12 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { error } = require('./errors/error');
 const { limiter } = require('./utils/ratelimit');
 
-const { PORT = 3000, NODE_ENV, JWT_SECRET } = process.env;
+const { PORT = 3000, NODE_ENV, MONGO } = process.env;
 
 const app = express();
 app.use(cookieParser());
 
-mongoose.connect(NODE_ENV === 'production' ? JWT_SECRET : 'mongodb://localhost:27017/moviesdb', {
+mongoose.connect(NODE_ENV === 'production' ? MONGO : 'mongodb://localhost:27017/moviesdb', {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 });
