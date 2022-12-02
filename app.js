@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+const path = require('path');
 const corsHandler = require('./middlewares/corsHandler');
 const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -16,7 +17,10 @@ const { PORT = 3000, NODE_ENV, JWT_SECRET } = process.env;
 const app = express();
 app.use(cookieParser());
 
-mongoose.connect(NODE_ENV === 'production' ? JWT_SECRET : 'mongodb://localhost:27017/moviesdb');
+mongoose.connect(NODE_ENV === 'production' ? JWT_SECRET : 'mongodb://localhost:27017/moviesdb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: false,
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -40,6 +44,8 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use(error);
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
