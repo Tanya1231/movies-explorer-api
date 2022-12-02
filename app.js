@@ -11,13 +11,14 @@ const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { error } = require('./errors/error');
 const { limiter } = require('./utils/ratelimit');
+const { MONGODB, CRASH_TEXT } = require('./utils/constants');
 
 const { PORT = 3000, NODE_ENV, MONGO } = process.env;
 
 const app = express();
 app.use(cookieParser());
 
-mongoose.connect(NODE_ENV === 'production' ? MONGO : 'mongodb://localhost:27017/moviesdb', {
+mongoose.connect(NODE_ENV === 'production' ? MONGO : MONGODB, {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 });
@@ -25,17 +26,18 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO : 'mongodb://localhost:27017/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(limiter);
 
 app.use(corsHandler);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
+    throw new Error(CRASH_TEXT);
   }, 0);
 });
 
 app.use(requestLogger);
+
+app.use(limiter);
 
 app.use(router);
 

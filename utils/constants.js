@@ -1,5 +1,7 @@
 const REG_EX = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/;
 
+const MONGODB = 'mongodb://localhost:27017/moviesdb';
+
 const SERVER_TEXT = 'Ошибка по умолчанию';
 const VALID_TEXT = 'Переданные данные не валидны';
 const CONFLICT_TEXT = 'При регистрации указан email, который уже существует на сервере';
@@ -14,6 +16,7 @@ const EXIT_TEXT = 'Вы вышли из акаунта';
 const ERROR_TEXT = 'Нужна авторизация';
 const LINK_TEXT = 'Ошибка ссылка невалидна';
 const EMAIL_TEXT = 'Неверно заполнен email';
+const CRASH_TEXT = 'Сервер сейчас упадёт';
 
 module.exports = {
   REG_EX,
@@ -31,4 +34,6 @@ module.exports = {
   ERROR_TEXT,
   LINK_TEXT,
   EMAIL_TEXT,
+  MONGODB,
+  CRASH_TEXT,
 };

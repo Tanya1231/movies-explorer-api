@@ -8,8 +8,9 @@ const {
 } = require('../utils/constants');
 
 const getMovies = async (req, res, next) => {
+  const owner = req.user._id;
   try {
-    const movies = await Movie.find({});
+    const movies = await Movie.find({ owner });
     return res.send(movies);
   } catch (err) {
     return next(new ErrorServer(SERVER_TEXT));
@@ -69,9 +70,9 @@ const createMovie = async (req, res, next) => {
     return res.send(movied);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      return next(new ErrorCode(err));
+      return next(new ErrorCode(VALID_TEXT));
     }
-    return next(new ErrorServer('Ошибка по умолчанию'));
+    return next(new ErrorServer(SERVER_TEXT));
   }
 };
 
