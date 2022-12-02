@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { EMAIL_TEXT } = require('../utils/constants');
 
 const { Schema } = mongoose;
 
@@ -16,7 +17,7 @@ const userSchema = new Schema({
     required: [true, 'Обязательное поле'],
     validate: {
       validator: validator.isEmail,
-      message: 'Неверно заполнен email',
+      message: EMAIL_TEXT,
     },
   },
   password: {

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { REG_EX } = require('../utils/validation');
+const { REG_EX, LINK_TEXT } = require('../utils/constants');
 
 const { Schema } = mongoose;
 
@@ -8,12 +8,12 @@ const movieSchema = new Schema({
     type: String,
     required: [true, 'Обязательное поле'],
   },
-  duration: {
-    type: Number,
-    required: [true, 'Обязательное поле'],
-  },
   director: {
     type: String,
+    required: [true, 'Обязательное поле'],
+  },
+  duration: {
+    type: Number,
     required: [true, 'Обязательное поле'],
   },
   year: {
@@ -31,7 +31,7 @@ const movieSchema = new Schema({
       validator(v) {
         return REG_EX.test(v);
       },
-      message: 'Ошибка ссылка невалидна',
+      message: LINK_TEXT,
     },
   },
   trailerLink: {
@@ -41,7 +41,7 @@ const movieSchema = new Schema({
       validator(v) {
         return REG_EX.test(v);
       },
-      message: 'Ошибка ссылка невалидна',
+      message: LINK_TEXT,
     },
   },
   thumbnail: {
@@ -51,7 +51,7 @@ const movieSchema = new Schema({
       validator(v) {
         return REG_EX.test(v);
       },
-      message: 'Ошибка ссылка невалидна',
+      message: LINK_TEXT,
     },
   },
   owner: {

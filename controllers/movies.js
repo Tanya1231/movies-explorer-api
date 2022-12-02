@@ -3,17 +3,16 @@ const ErrorCode = require('../errors/ErrorCode');
 const ErrorNotFound = require('../errors/ErrorNotFound');
 const ErrorServer = require('../errors/ErrorServer');
 const ErrorForbidden = require('../errors/ErrorForbidden');
+const {
+  SERVER_TEXT, VALID_TEXT, FILM_TEXT, FORBIDDEN_TEXT, DELETE_TEXT,
+} = require('../utils/constants');
 
 const getMovies = async (req, res, next) => {
   try {
-    const { owner } = req.user._id;
-    const movies = await Movie.find({ owner });
-    if (!movies) {
-      return next(new ErrorNotFound('Фильмы с указанным _id не найдены'));
-    }
+    const movies = await Movie.find({});
     return res.send(movies);
   } catch (err) {
-    return next(new ErrorServer('Ошибка по умолчанию'));
+    return next(new ErrorServer(SERVER_TEXT));
   }
 };
 
@@ -22,24 +21,34 @@ const deleteMovie = async (req, res, next) => {
   try {
     const movie = await Movie.findById(movieId);
     if (!movie) {
-      return next(new ErrorNotFound('Фильм с указанным _id не найдена'));
+      return next(new ErrorNotFound(FILM_TEXT));
     }
     if (req.user._id !== movie.owner.toString()) {
-      return next(new ErrorForbidden('Вы не можете удалить чужой фильм'));
+      return next(new ErrorForbidden(FORBIDDEN_TEXT));
     }
     await movie.remove();
-    return res.send({ message: 'Фильм удалён' });
+    return res.send({ message: DELETE_TEXT });
   } catch (err) {
     if (err.kind === 'ObjectId') {
-      return next(new ErrorCode('Переданны неккоректные данные для удаления фильма'));
+      return next(new ErrorCode(VALID_TEXT));
     }
-    return next(new ErrorServer('Ошибка по умолчанию'), err);
+    return next(new ErrorServer(SERVER_TEXT));
   }
 };
 
 const createMovie = async (req, res, next) => {
   const {
-    country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN,
   } = req.body;
   const owner = req.user._id;
   try {
@@ -50,16 +59,17 @@ const createMovie = async (req, res, next) => {
       year,
       description,
       image,
-      trailer,
-      nameRU,
-      nameEN,
+      trailerLink,
       thumbnail,
       owner,
+      movieId,
+      nameRU,
+      nameEN,
     });
     return res.send(movied);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      return next(new ErrorCode('Переданные данные не валидны'));
+      return next(new ErrorCode(err));
     }
     return next(new ErrorServer('Ошибка по умолчанию'));
   }
