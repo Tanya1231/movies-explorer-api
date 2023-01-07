@@ -10,7 +10,6 @@ const corsHandler = require('./middlewares/corsHandler');
 const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { error } = require('./errors/error');
-const { limiter } = require('./utils/ratelimit');
 const { MONGODB, CRASH_TEXT } = require('./utils/constants');
 
 const { PORT = 3000, NODE_ENV, MONGO } = process.env;
@@ -36,8 +35,6 @@ app.get('/crash-test', () => {
 });
 
 app.use(requestLogger);
-
-app.use(limiter);
 
 app.use(router);
 
