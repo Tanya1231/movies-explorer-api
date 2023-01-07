@@ -89,7 +89,7 @@ const login = async (req, res, next) => {
     res.cookie('jwt', token, {
       maxAge: 3600000,
       httpOnly: true,
-      sameSite: false,
+      sameSite: 'none',
     });
     return res.status(200).send({ message: AUTORIZATION_TEXT, token });
   } catch (err) {
