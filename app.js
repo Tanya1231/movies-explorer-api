@@ -11,6 +11,7 @@ const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { error } = require('./errors/error');
 const { MONGODB, CRASH_TEXT } = require('./utils/constants');
+const logger = require('./middlewares/logger');
 
 const { PORT = 3000, NODE_ENV, MONGO } = process.env;
 
@@ -21,6 +22,7 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO : MONGODB, {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 });
+app.use(logger);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
